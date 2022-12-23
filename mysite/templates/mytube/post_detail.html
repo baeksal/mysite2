@@ -2,12 +2,56 @@
 
 {% block content %}
 
+<div>
+    {% if request.GET.category %}
+    <a href="{% url 'mytube_list' %}">전체 목록</a> / <a href="{% url 'mytube_list' %}category/{{ request.GET.category }}/">카테고리 : {{ request.GET.category}}</a>
+    {% else %} 
+    <a href="{% url 'mytube_list' %}">전체 목록</a>
+    {% endif %} 
+</div>
 <div class="row d-flex justify-content-center">
-    <h4>DETAIL</h4>
     <div class="col-12">
-        <div class="p3 mt-3 mb-3"> 타이틀 : {{ object.title }}</div>        
-        <div class="p3 mt-3"> 콘텐츠 : {{ object.content }}</div>
+        <div class="p3 mt-3 mb-3">{{ object.title }}</div>        
+        <div class="ratio ratio-16x9">
+            <div id="player"></div>
+        </div>
+        <div class="p3 mt-3">{{ object.content }}</div>
     </div>
 </div>
+
+<script>
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+        videoId: '{{ object.video_id }}',     
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    var done = false;
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+        setTimeout(stopVideo, 600000);
+        done = true;
+        }
+    }
+    function stopVideo() {
+        player.stopVideo();
+    }
+
+    </script>
 
 {% endblock content %}
