@@ -5,13 +5,12 @@ class PostList(ListView): #ListView 클래스를 PostList로 상속
     model = Post
     template_name = 'mytube/post_list.html'
     ordering = ['-pk']
-    paginate_by = 40  
+    paginate_by = 5  
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
         context['all_post_count'] = self.get_queryset().count()
         context['categories'] = Category.objects.all()
-        context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return  context
 
 class PostListByCategory(PostList):
@@ -41,5 +40,4 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
-        context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return  context

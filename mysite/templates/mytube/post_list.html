@@ -13,4 +13,22 @@
     </div>
 </div>
 
+
+<div>
+    <span>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"  class="btn btn-light btn-sm border-0 bg-transparent" role="button">
+                <i class="bi bi-caret-left-fill"></i>
+            </a>
+        {% endif %}
+
+            <span class="btn pt-1 btn-sm disabled border-0 fw-bold">{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}</span> 
+                          
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-light btn-sm border-0 bg-transparent" role="button"> <i class="bi bi-caret-right-fill"></i></a>
+        {% endif %}
+    </span>
+
+</div>
+
 {% endblock content %}
